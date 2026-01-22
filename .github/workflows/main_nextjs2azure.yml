@@ -1,13 +1,17 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - nextjs2azure
+name: Build and deploy Node.js app to Azure Web App
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+env:
+  APPLICATION_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+  WEBAPP_NAME: "nextjs2azure"
+  NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
 
 jobs:
   build:
@@ -49,7 +53,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'nextjs2azure'
+          app-name: ${{ env.WEBAPP_NAME }}
           slot-name: 'Production'
-          package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_32DB16F0836C47F691512517C35CBD8C }}
+          package: ./build/standalone
+          publish-profile: ${{ env.APPLICATION_PUBLISH_PROFILE }}
