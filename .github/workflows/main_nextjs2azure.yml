@@ -43,7 +43,7 @@ jobs:
           az webapp deployment list-publishing-profiles \
           --name ${{ env.WEBAPP_NAME }} \
           --resource-group rgNextJs2AzureApp \
-          --xml publish-profile.xml
+          --xml > publish-profile.xml
 
       - name: Set SCM_DO_BUILD_DURING_DEPLOYMENT
         run: |
