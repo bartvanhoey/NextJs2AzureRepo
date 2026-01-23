@@ -40,7 +40,6 @@ jobs:
 
       - name: Login to Azure using publish profile
         run: |
-          echo "${{ env.APPLICATION_PUBLISH_PROFILE }}" > publish-profile.xml
           az webapp deployment list-publishing-profiles \
           --name ${{ env.WEBAPP_NAME }} \
           --resource-group rgNextJs2AzureApp \
@@ -48,7 +47,6 @@ jobs:
 
       - name: Set SCM_DO_BUILD_DURING_DEPLOYMENT
         run: |
-          echo "${{ env.APPLICATION_PUBLISH_PROFILE }}" > publish-profile.xml
           USERNAME=$(xmllint --xpath "string(//publishProfile[@publishMethod='MSDeploy']/@userName)" publish-profile.xml)
           PASSWORD=$(xmllint --xpath "string(//publishProfile[@publishMethod='MSDeploy']/@userPWD)" publish-profile.xml)
           az webapp deployment login --name ${{ env.WEBAPP_NAME }} \
