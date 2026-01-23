@@ -38,6 +38,28 @@ jobs:
           name: node-app
           path: .
 
+      - name: Login to Azure using publish profile
+        run: |
+          echo "${{ env.APPLICATION_PUBLISH_PROFILE }}" > publish-profile.xml
+          az webapp deployment list-publishing-profiles \
+          --name ${{ env.WEBAPP_NAME }} \
+          --resource-group rgNextJs2AzureApp \
+          --xml publish-profile.xml
+
+      - name: Set SCM_DO_BUILD_DURING_DEPLOYMENT
+        run: |
+          echo "${{ env.APPLICATION_PUBLISH_PROFILE }}" > publish-profile.xml
+          USERNAME=$(xmllint --xpath "string(//publishProfile[@publishMethod='MSDeploy']/@userName)" publish-profile.xml)
+          PASSWORD=$(xmllint --xpath "string(//publishProfile[@publishMethod='MSDeploy']/@userPWD)" publish-profile.xml)
+          az webapp deployment login --name ${{ env.WEBAPP_NAME }} \
+                               --resource-group rgNextJs2AzureApp \
+                               --user $USERNAME --password $PASSWORD
+          az webapp config appsettings set \
+          --name ${{ env.WEBAPP_NAME }} \
+          --resource-group rgNextJs2AzureApp \
+          --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false
+
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -48,15 +70,6 @@ jobs:
         with:
           name: node-app
 
-      - name: Set SCM_DO_BUILD_DURING_DEPLOYMENT
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.59.0
-          inlineScript: |
-            az webapp config appsettings set \
-              --name ${{ env.WEBAPP_NAME }} \
-              --resource-group rgNextJs2AzureApp \
-              --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
@@ -65,3 +78,6 @@ jobs:
           slot-name: Production
           publish-profile: ${{ env.APPLICATION_PUBLISH_PROFILE }}
           package: .
+          app-settings: SCM_DO_BUILD_DURING_DEPLOYMENT=false
+          
+          
