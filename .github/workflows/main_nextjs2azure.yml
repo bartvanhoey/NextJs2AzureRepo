@@ -32,12 +32,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-      - name: Prepare standalone package
-        run: |
-          mkdir -p deploy
-          cp -R .next/standalone/* deploy/
-          cp -R .next/static deploy/.next/
-          cp -R public deploy/
+          
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -60,5 +55,5 @@ jobs:
         with:
           app-name: ${{ env.WEBAPP_NAME }}
           slot-name: 'Production'
-          package: ./next/standalone
+          package: .
           publish-profile: ${{ env.APPLICATION_PUBLISH_PROFILE }}
