@@ -173,4 +173,4 @@ You should see a new workflow run triggered by your recent push. Wait for the wo
 Once the deployment is complete, you can access your Next.js application using the Default domain url you copied earlier.
 Open your web browser and navigate to that URL to see your application live on Azure!
 
-navigate to this [url](https://nextjs2azure-g8fhechgdaexgbaa.westeurope-01.azurewebsites.net/) to see your application live on Azure!
+navigate to this [url](https://nextjs2azure-g8fhechgdaexgbaa.westeurope-01.azurewebsites.net) to see your application live on Azure!
