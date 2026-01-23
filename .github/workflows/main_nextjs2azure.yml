@@ -55,5 +55,5 @@ jobs:
         with:
           app-name: ${{ env.WEBAPP_NAME }}
           slot-name: 'Production'
-          package: ./build/standalone
+          package: ./next/standalone
           publish-profile: ${{ env.APPLICATION_PUBLISH_PROFILE }}
